@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevelopIdeas/joi-to-yup.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
