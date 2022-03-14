@@ -131,7 +131,7 @@ const baseSchemaForProp = (prop, jsonSchema) => {
     case 'integer':
       return yup.number().integer()
     case 'array':
-      console.log(jsonSchema, 'array schema')
+      // console.log(jsonSchema, 'array schema')
       if (jsonSchema.items) {
         const alts = jsonSchema.items.map(j => {
           return createSchema(j, null, prop)
@@ -274,10 +274,10 @@ const createSchema = (jsonSchema, schema, parentKey) => {
       schema = mapSchemaProps(jsonSchema, schema, propKey)
       break;
     case 'alternatives':
-      console.log('alternatives 1')
+      // console.log('alternatives 1')
       schema = yup.mixed()
       schema = mapSchemaProps(jsonSchema, schema, propKey)
-      console.log('alternatives 2')
+      // console.log('alternatives 2')
       break;
     case 'binary':
       if (jsonSchema.flags && jsonSchema.flags.encoding) {

@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "joi": "^17.6.0",
     "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "joi": "^17.6.0"
   }
 }
