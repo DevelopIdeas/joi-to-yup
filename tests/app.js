@@ -2,7 +2,7 @@ const joi = require('joi')
 const { createSchema } = require('../index')
 const yup = require('yup')
 
-const joiSchema = joi.object().keys({
+const joiSchema2 = joi.object().keys({
   nickName: joi.string().required().min(3).max(20).example('鹄思乱想').label('Hero Nickname')
     .regex(/^[a-z]+$/, { name: 'alpha', invert: true }),
   avatar: joi.string().uri().allow(null).default(null),
@@ -22,12 +22,41 @@ const joiSchema = joi.object().keys({
   ).required()).min(1).max(3).unique().label('Skills'),
   tags: joi.array().items(joi.string().required()).length(2).required(),
   certificate: joi.binary().encoding('base64').allow(null).default(null).label('Certificate'),
-  notes: joi.any().meta({ 'x-supported-lang': ['zh-CN', 'en-US'], deprecated: true })
+  notes: joi.any().meta({ form: { type: 'select', options: [{ value: 'all', text: 'All' }, { value: 'some', text: 'Some' }] } })
 })
 
-const schema2 = yup.object().shape({
+// const schema2 = yup.object().shape({
+  // gender: yup.string().oneOf(['Male', 'Female', '']).default('Male')
+// })
+
+const schema3 = yup.object().shape({
   gender: yup.string().oneOf(['Male', 'Female', '']).default('Male')
 })
+
+// const joiSchema = joi.object({
+//   show: joi.string().required(),
+//   show_name: joi.string().required(),
+//   season: joi.number().required(),
+//   active: joi.number().allow(0, 1).default(1),
+//   deleted: joi.number().allow(0, 1).default(0)
+// });
+
+const joiSchema = joi.object({
+  show: joi.string().required(),
+  show_name: joi.string().required(),
+  season: joi.number().required(),
+  season_ep_str: joi.string().required(),
+  status: joi.string().required(),
+  episode_name: joi.string().allow('').default(null),
+  first_aired: {
+    str: joi.string().allow('', null).default(null),
+    date: joi.date().allow(null).default(null),
+  },
+  torrent: joi.object().meta({ mongoose: { type: 'mixed' } }).default({}),
+  torrent_add: joi.object().meta({ mongoose: { type: 'mixed' } }).default({}),
+  active: joi.number().allow(0, 1).default(1),
+  deleted: joi.number().allow(0, 1).default(0)
+});
 
 const main = async () => {
   /*let schema = createSchema(jsonSchema)
@@ -42,16 +71,29 @@ const main = async () => {
   })*/
 
   const joiDesc = joiSchema.describe()
-  console.log(joiDesc, 'joiSchema.describe()')
+  // console.log(joiDesc.keys.notes.metas[0].form, 'joiSchema.describe()')
+  // console.log(JSON.stringify(joiDesc), 'joiSchema.describe()')
   let schema = createSchema(joiDesc)
 
+  // schema.validate({
+  //   nickName: 'jdjdj',
+  //   avatar: 'http://google.com?hello=world&a=b',
+  //   gender: 'Male',
+  //   skills: ['1','2','3'],
+  //   tags: [1, 2]
+  //   // certificate: null
+  // }).then(vals => {
+  //   console.log(vals, 'vals2')
+  // }).catch(ex => {
+  //   console.log(ex, 'ex2')
+  // })
   schema.validate({
-    nickName: 'jdjdj',
-    avatar: 'http://google.com?hello=world&a=b',
-    gender: 'Male',
-    skills: ['1','2','3'],
-    tags: [1, 2]
-    // certificate: null
+    show: 'Show',
+    show_name: 'Some Show',
+    episode_name: 'Hello',
+    season: 1,
+    season_ep_str: 'Hello World',
+    status: 'queued',
   }).then(vals => {
     console.log(vals, 'vals2')
   }).catch(ex => {

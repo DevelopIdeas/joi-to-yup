@@ -62,9 +62,11 @@ yup.addMethod(yup.string, 'ip', function(message = 'Invalid IP address') {
 
 const createObjectSchema = (jsonProps) => {
   let props = {}
-  Object.keys(jsonProps).map(key => {
-    props[key] = createSchema(jsonProps[key], null, key)
-  })
+  if (jsonProps) {
+    Object.keys(jsonProps).map(key => {
+      props[key] = createSchema(jsonProps[key], null, key)
+    })
+  }
   return yup.object().shape(props)
 }
 
@@ -178,8 +180,9 @@ const mapSchemaProps = (jsonSchema, schema, schemaType) => {
         schema = schema.oneOf(allow)
       } else if (allow.indexOf(null) > -1) {
         schema = schema.nullable(true)
+      } else if (Object.keys(flags).length === 1 && flags.default !== undefined) {
       } else {
-        console.warn('UNHANDLED ACTION')
+        console.warn('UNHANDLED ACTION', flags)
       }
     }
   }
