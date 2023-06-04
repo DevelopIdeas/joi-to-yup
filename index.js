@@ -231,16 +231,14 @@ const mapSchemaProps = (jsonSchema, schema, schemaType) => {
                 console.warn(`Unsupported rule ${sPropKey}`)
                 addRule = false
                 break
+              default:
+                addRule = false
+                break
             }
           }
-          try {
-            if (addRule) {
-              const resVal = valExtract(sPropKey, val)
-              schema = schema[sPropKey](resVal)
-            }
-          } catch (ex) {
-            // console.warn('joi-to-yup => UNSUPPORTED', { sPropKey, schema })
-            // console.error('joi-to-yup', ex)
+          if (addRule) {
+            const resVal = valExtract(sPropKey, val)
+            schema = schema[sPropKey](resVal)
           }
         }
       }
